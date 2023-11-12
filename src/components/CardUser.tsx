@@ -5,7 +5,7 @@ import {User} from "@/src/interfaces/user.interface";
 interface Props {
     user: User,
     onDelUser: (username:string)=> void,
-    onEditUser: (user:string)=> void
+    onEditUser: (user:User)=> void
 }
 
 const CardUser:React.FC<Props> = ({user, onDelUser, onEditUser}) => {
@@ -15,7 +15,7 @@ const CardUser:React.FC<Props> = ({user, onDelUser, onEditUser}) => {
     }
 
     const handleEdit = () =>{
-        onEditUser(user.username)
+        onEditUser(user)
     }
 
     return (
@@ -26,11 +26,10 @@ const CardUser:React.FC<Props> = ({user, onDelUser, onEditUser}) => {
                 </div>
             </CardHeader>
             <Divider/>
-            <CardBody className={'flex flex-column gap-3 px-3 py-0 text-small text-default-400'}>
+            <CardBody className={'flex flex-column gap-3 px-3 py-0 text-small text-default-400 p-2'}>
                 <p>password: {user.password}</p>
                 <p>last connection: {(user.lastDate===null)?'not yet connected':user.lastDate}</p>
-                <div className={'flex gap-1 my-2'}>
-
+                <div className={'flex gap-1'}>
                     <Button color="danger" radius="full" size={'sm'} onPress={handlePress}>Delete</Button>
                     <Button color="secondary" radius="full" size={'sm'} onPress={handleEdit}>Change password</Button>
                 </div>

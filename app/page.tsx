@@ -9,11 +9,15 @@ import {
     Tabs,
 } from '@nextui-org/react';
 import React, {useState} from 'react';
+import axios from "../src/config/axios";
+import Swal from 'sweetalert2'
+import {type} from "os";
+import {valueOf} from "node";
 
 export default function Home() {
     const [selected, setSelected] = useState('login');
     const [formData, setFormData] = useState({
-        email: "",
+        username: "",
         password: ""
     });
 
@@ -28,11 +32,34 @@ export default function Home() {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault()
         if (selected === "login") {
-            console.log("login")
+            axios.post('auth', formData).then((res) => {
+                console.log(res)
+            })
         } else if (selected === "sign-up") {
-            console.log("sign-up")
+            axios.post('auth/create', formData).then((res) => {
+                if (res.status === 200) {
+                    setSelected('login');
+                    Swal.fire({
+                        icon: "success",
+                        title: "successful creation",
+                        text: "The user was successfully created, you can now log in"
+                    });
+                }
+                //TODO MANEJAR RESPUESTA
+            }).catch((error) => {
+                const errors = error.response.data.inputErrors.map((err:string, index:number)=>
+                    <div key={index}>{err}</div>
+                )
+
+                console.log(errors)
+                //TODO ACOMODAR ESTE GRAN HPTA PARA QUE NO LANCE [OBJECT]
+                Swal.fire({
+                    icon: "error",
+                    title: "Error...",
+                    text: errors
+                });
+            })
         }
-        console.log(formData)
     }
 
 
@@ -52,10 +79,10 @@ export default function Home() {
                                 <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                                     <Input
                                         isRequired
-                                        label="Email"
-                                        placeholder="Enter your email"
-                                        type="email"
-                                        name={"email"}
+                                        label="Username"
+                                        placeholder="Enter your username"
+                                        type="text"
+                                        name={"username"}
                                         onChange={handleChange}
                                     />
                                     <Input
@@ -87,10 +114,10 @@ export default function Home() {
                                 <form className="flex flex-col gap-4 h-[300px]" onSubmit={handleSubmit}>
                                     <Input
                                         isRequired
-                                        label="Email"
-                                        placeholder="Enter your email"
-                                        type="email"
-                                        name={"email"}
+                                        label="Username"
+                                        placeholder="Enter your username"
+                                        type="text"
+                                        name={"username"}
                                         onChange={handleChange}
                                     />
                                     <Input
