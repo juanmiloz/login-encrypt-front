@@ -27,19 +27,30 @@ const MyComponent = () => {
             console.log(e)
         }
     }
+  };
 
-    useEffect(() => {
-        getPersons();}, []);
+  useEffect(() => {
+    getPersons();
+  }, []);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = e.target.value;
+    setChangeUser({
+      ...changeUser,
+      password: value,
+    });
+  };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const value= e.target.value;
-        setChangeUser({
-            ...changeUser,
-            'password': value
-        })
-    }
+  const deleteUser = (username: string): void => {
+    axios.delete('http://localhost:8080/user/' + username).then(() => {
+      getPersons();
+    });
+  };
 
+  const editUser = (user: User) => {
+    setChangeUser(user);
+    onOpen();
+  };
 
     const deleteUser = (username:string):void =>{
         const config = CRUDService.getHeaderConfig();

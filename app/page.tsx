@@ -5,22 +5,44 @@ import axios from "../src/config/axios";
 import Swal from 'sweetalert2'
 import {useRouter} from "next/navigation";
 import {CRUDService} from "@/src/service/axios";
+import useAuth from '@/hooks/useAuth';
 
 export default function Home() {
-    const [selected, setSelected] = useState('login');
-    const [formData, setFormData] = useState({
-        username: "",
-        password: ""
+  const [selected, setSelected] = useState('login');
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const { validateUser, createUser } = useAuth();
+  const router = useRouter();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
     });
+  };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const {name, value} = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        })
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    if (selected === 'login') {
+      const res = await validateUser(formData.username, formData.password);
+      if (res.valid) {
+        res.admin ? router.push('/admin') : router.push('/home');
+      }
+    } else if (selected === 'sign-up') {
+      const res = await createUser(formData.username, formData.password);
+      if (res.valid) {
+        res.admin ? router.push('/admin') : router.push('/home');
+      }
     }
+    setLoading(false);
+  };
 
+  if (loading) return <div>Loading...</div>;
     const router = useRouter()
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {

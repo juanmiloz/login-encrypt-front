@@ -10,7 +10,7 @@ export function NavbarCDS() {
   return (
     <Navbar isBordered isBlurred>
       <NavbarBrand>
-        <p className="font-bold text-inherit">LOGIN ENCRYPT</p>
+        <p className="font-bold text-inherit">CDS Auth</p>
       </NavbarBrand>
       <NavbarContent justify="end">
         <NavbarItem>
