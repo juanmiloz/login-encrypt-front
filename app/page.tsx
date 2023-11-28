@@ -1,18 +1,10 @@
 'use client';
-import {
-    Button,
-    Card,
-    CardBody,
-    Input,
-    Link,
-    Tab,
-    Tabs,
-} from '@nextui-org/react';
+import {Button, Card, CardBody, Input, Link, Tab, Tabs,} from '@nextui-org/react';
 import React, {useState} from 'react';
 import axios from "../src/config/axios";
 import Swal from 'sweetalert2'
-import {type} from "os";
-import {valueOf} from "node";
+import {useRouter} from "next/navigation";
+import {CRUDService} from "@/src/service/axios";
 
 export default function Home() {
     const [selected, setSelected] = useState('login');
@@ -29,13 +21,32 @@ export default function Home() {
         })
     }
 
+    const router = useRouter()
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault()
         if (selected === "login") {
             axios.post('auth', formData).then((res) => {
-                console.log(res)
+                if(res.status===200){
+                    localStorage.setItem("webToken",(res.data.token)?res.data.token:'')
+                    const token: string = res.data.token
+                    const decoded = CRUDService.decodeJWT(token)
+                    if(decoded.roleId==="c386bc08-25d4-49e3-a440-95b2133c5d1a"){
+                        router.push('/admin')
+                    }else if(decoded.roleId==="ea95d591-2590-4d83-8415-d492a0f681d4"){
+                        router.push('/home')
+                    }
+                }
+            }).catch((err)=>{
+                console.log(err)
+                Swal.fire({
+                    icon: "error",
+                    title: "Error " + err.response.data.code,
+                    text: err.response.data.message
+                 });
             })
         } else if (selected === "sign-up") {
+            console.log(formData)
             axios.post('auth/create', formData).then((res) => {
                 if (res.status === 200) {
                     setSelected('login');
@@ -51,6 +62,7 @@ export default function Home() {
                     <div key={index}>{err}</div>
                 )
 
+                console.log('paso por aca')
                 console.log(errors)
                 //TODO ACOMODAR ESTE GRAN HPTA PARA QUE NO LANCE [OBJECT]
                 Swal.fire({

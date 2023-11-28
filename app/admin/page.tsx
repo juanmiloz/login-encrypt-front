@@ -4,6 +4,8 @@ import axios from "axios";
 import CardUser from "@/src/components/CardUser";
 import {User} from "@/src/interfaces/user.interface";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input} from "@nextui-org/react";
+import {CRUDService} from "@/src/service/axios";
+import Swal from "sweetalert2";
 
 const MyComponent = () => {
     const [users, setUsers] = useState([]);
@@ -11,13 +13,15 @@ const MyComponent = () => {
         username:"",
         password:"",
         lastDate:"",
+        roleId:""
     });
     // const router = useRouter()
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
     const getPersons = async () =>{
         try{
-            const response = await axios.get('http://localhost:8080/user')
+            const config = CRUDService.getHeaderConfig();
+            const response = await axios.get('http://localhost:8080/user', config)
             setUsers(response.data)
         }catch (e){
             console.log(e)
@@ -38,7 +42,8 @@ const MyComponent = () => {
 
 
     const deleteUser = (username:string):void =>{
-        axios.delete('http://localhost:8080/user/'+username).then(()=>{
+        const config = CRUDService.getHeaderConfig();
+        axios.delete('http://localhost:8080/user/'+username, config).then(()=>{
             getPersons()
         })
     }
@@ -49,7 +54,14 @@ const MyComponent = () => {
     }
 
     const saveNewPassword = () =>{
-        axios.put('http://localhost:8080/user', changeUser).then(()=>{
+        const config = CRUDService.getHeaderConfig();
+        console.log(changeUser)
+        axios.put('http://localhost:8080/user', changeUser, config).then(()=>{
+            Swal.fire({
+                icon: "success",
+                title: "successful updated",
+                text: "The user was successfully updated"
+            });
             getPersons()
         })
     }
