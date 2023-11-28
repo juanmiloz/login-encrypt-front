@@ -59,7 +59,7 @@ export default function Home() {
                 }
             }).catch((error) => {
                 const errors = error.response.data.inputErrors.map((err: string, index: number) =>
-                    <div key={index}>{err}</div>
+                    " "+err.slice(0,-1)
                 )
                 Swal.fire({
                     icon: "error",

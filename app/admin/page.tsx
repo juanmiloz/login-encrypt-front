@@ -66,7 +66,6 @@ const MyComponent = () => {
 
     const saveNewPassword = () => {
         const config = CRUDService.getHeaderConfig();
-        console.log(changeUser)
         axios.put('http://localhost:8080/user', changeUser, config).then(() => {
             Swal.fire({
                 icon: "success",
