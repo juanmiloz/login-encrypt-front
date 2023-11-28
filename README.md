@@ -11,7 +11,15 @@ El frontend del sistema está desarrollado en Typescript con Next.js y Axios se 
 La Clase axios.ts es un servicio de ussuario que maneja el almacenamiento del token JWT en el LocalStorage del navegador y lo agrega a los encabezados de las solicitudes.
 
 <h1>Dificultades</h1>
+<h5>Back:</h5>
+La implementacion de la seguridad, porque es un reto nuevo para nuestro equipo.
 
+Se dificulto a la hora de configurar la contraseña vacia para los usuarios desde el rol de administrador
+
+Implementacion de JWT como standard porque consigo trae grandes desafios, principalmente por la poca experiencia con el, fue necesario aprender de la generacion y validacion de tokens, porque es de vital importancia el correcto funcionamiento para asi tener un servicio seguro y consistente
+
+<h5>Front:</h5>
+Las peticiones por medio de Axios fue un reto importante, porque era una oportunidad de aprendizaje y por eso mismo un reto, es algo nuevo para este equipo   
 <h1>Conclusiones</h1>
 La creación de este sistema de autenticación y administración de usuarios representó un desafío valioso que proporcionó conocimientos sobre la implementación de tokens JWT, la creación de una API RESTful y la integración entre el backend y el frontend. A lo largo del proyecto, se logró desarrollar un sistema operativo que permite a los usuarios autenticarse, acceder a información de usuarios, eliminar cuentas, cambiar contraseñas, registrarse y cerrar sesión de manera segura.
 
