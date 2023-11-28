@@ -3,8 +3,8 @@ import React, {useEffect, useState} from "react";
 import {Tabs, Tab, Card, CardBody, Input, Button} from "@nextui-org/react";
 import {CRUDService} from "@/src/service/axios";
 import axios from "axios";
-import {User} from "@/src/interfaces/user.interface";
 import Swal from "sweetalert2";
+import {User} from "@/interfaces/user.interface";
 
 const MyComponent = () => {
 

@@ -1,14 +1,21 @@
-import { User } from '@/types/user';
+import {User} from '@/types/user';
 import axios from '../config/axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
+import {Login} from "@/interfaces/login.interface";
 
 const useAuth = () => {
   const validateUser = async (
-    username: string,
-    password: string
+    userData: Login
   ): Promise<User> => {
-    const res = await axios.post('auth', { username, password });
-    const user: User = jwtDecode(res.data);
+    const data: string = await axios.post('auth', userData).then((res)=>{
+      if(res.status===200){
+        localStorage.setItem("webToken",(res.data.token)?res.data.token:'')
+        return res.data.token
+      }
+    });
+    const user: User = jwtDecode(data);
+    user.isAdmin = (user.roleName === "admin");
+    console.log(user)
     return user;
   };
 

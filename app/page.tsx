@@ -1,74 +1,53 @@
 'use client';
 import {Button, Card, CardBody, Input, Link, Tab, Tabs,} from '@nextui-org/react';
 import React, {useState} from 'react';
-import axios from "../src/config/axios";
 import Swal from 'sweetalert2'
 import {useRouter} from "next/navigation";
 import {CRUDService} from "@/src/service/axios";
-import useAuth from '@/hooks/useAuth';
+import axios from "@/config/axios";
 
 export default function Home() {
-  const [selected, setSelected] = useState('login');
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  });
-  const [loading, setLoading] = useState(false);
-  const { validateUser, createUser } = useAuth();
-  const router = useRouter();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
+    const [selected, setSelected] = useState('login');
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
     });
-  };
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    if (selected === 'login') {
-      const res = await validateUser(formData.username, formData.password);
-      if (res.valid) {
-        res.admin ? router.push('/admin') : router.push('/home');
-      }
-    } else if (selected === 'sign-up') {
-      const res = await createUser(formData.username, formData.password);
-      if (res.valid) {
-        res.admin ? router.push('/admin') : router.push('/home');
-      }
-    }
-    setLoading(false);
-  };
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const {name, value} = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
 
-  if (loading) return <div>Loading...</div>;
-    const router = useRouter()
+    if (loading) return <div>Loading...</div>;
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault()
+        setLoading(true)
         if (selected === "login") {
             axios.post('auth', formData).then((res) => {
-                if(res.status===200){
-                    localStorage.setItem("webToken",(res.data.token)?res.data.token:'')
+                if (res.status === 200) {
+                    localStorage.setItem("webToken", (res.data.token) ? res.data.token : '')
                     const token: string = res.data.token
                     const decoded = CRUDService.decodeJWT(token)
-                    if(decoded.roleId==="c386bc08-25d4-49e3-a440-95b2133c5d1a"){
+                    if (decoded.roleId === "c386bc08-25d4-49e3-a440-95b2133c5d1a") {
                         router.push('/admin')
-                    }else if(decoded.roleId==="ea95d591-2590-4d83-8415-d492a0f681d4"){
+                    } else if (decoded.roleId === "ea95d591-2590-4d83-8415-d492a0f681d4") {
                         router.push('/home')
                     }
                 }
-            }).catch((err)=>{
-                console.log(err)
+            }).catch((err) => {
                 Swal.fire({
                     icon: "error",
                     title: "Error " + err.response.data.code,
                     text: err.response.data.message
-                 });
+                });
             })
         } else if (selected === "sign-up") {
-            console.log(formData)
             axios.post('auth/create', formData).then((res) => {
                 if (res.status === 200) {
                     setSelected('login');
@@ -78,15 +57,10 @@ export default function Home() {
                         text: "The user was successfully created, you can now log in"
                     });
                 }
-                //TODO MANEJAR RESPUESTA
             }).catch((error) => {
-                const errors = error.response.data.inputErrors.map((err:string, index:number)=>
+                const errors = error.response.data.inputErrors.map((err: string, index: number) =>
                     <div key={index}>{err}</div>
                 )
-
-                console.log('paso por aca')
-                console.log(errors)
-                //TODO ACOMODAR ESTE GRAN HPTA PARA QUE NO LANCE [OBJECT]
                 Swal.fire({
                     icon: "error",
                     title: "Error...",
@@ -94,6 +68,7 @@ export default function Home() {
                 });
             })
         }
+        setLoading(false)
     }
 
 
@@ -120,7 +95,6 @@ export default function Home() {
                                         onChange={handleChange}
                                     />
                                     <Input
-                                        isRequired
                                         label="Password"
                                         placeholder="Enter your password"
                                         type="password"

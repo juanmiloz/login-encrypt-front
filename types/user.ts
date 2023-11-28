@@ -1,5 +1,6 @@
 export type User = {
   username: string;
-  admin: boolean;
+  roleName: string;
+  isAdmin: boolean | null;
   valid: boolean;
 };
