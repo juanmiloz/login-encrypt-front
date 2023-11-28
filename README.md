@@ -14,6 +14,7 @@ Este informe documenta el desarrollo de el back-end de un sistema de autenticaci
 
 <h1>Dificultades</h1>
 <h5>Back:</h5>
+
 * La implementacion de la seguridad, porque es un reto nuevo para nuestro equipo.
 
 * Se dificulto a la hora de configurar la contraseña vacia para los usuarios desde el rol de administrador
