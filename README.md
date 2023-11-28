@@ -3,7 +3,8 @@ Este informe documenta el desarrollo de el back-end de un sistema de autenticaci
 
 
 <h1>Desarrollo del Programa</h1>
-<h2>El sistema se divide en dos componentes principales y este repositorio es del backend</h2>
+
+<h2>Backend</h2>
 
 El backend del sistema está desarrollado en unicamente en Java con Spring Boot.
 
